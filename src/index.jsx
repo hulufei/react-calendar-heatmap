@@ -78,9 +78,6 @@ class CalendarHeatmap extends React.Component {
       const index = Math.floor((date - this.getStartDateWithEmptyDays()) / MILLISECONDS_IN_ONE_DAY);
       memo[index] = {
         value,
-        className: this.props.classForValue(value),
-        title: this.props.titleForValue ? this.props.titleForValue(value) : null,
-        tooltipDataAttrs: this.getTooltipDataAttrsForValue(value),
       };
       return memo;
     }, {});
@@ -95,21 +92,24 @@ class CalendarHeatmap extends React.Component {
 
   getClassNameForIndex(index) {
     if (this.state.valueCache[index]) {
-      return this.state.valueCache[index].className;
+      const value =  this.state.valueCache[index].value;
+      return this.props.classForValue(value);
     }
     return this.props.classForValue(null);
   }
 
   getTitleForIndex(index) {
     if (this.state.valueCache[index]) {
-      return this.state.valueCache[index].title;
+      const value =  this.state.valueCache[index].value;
+      return this.props.titleForValue ? this.props.titleForValue(value) : null;
     }
     return this.props.titleForValue ? this.props.titleForValue(null) : null;
   }
 
   getTooltipDataAttrsForIndex(index) {
     if (this.state.valueCache[index]) {
-      return this.state.valueCache[index].tooltipDataAttrs;
+      const value =  this.state.valueCache[index].value;
+      return this.getTooltipDataAttrsForValue(value);
     }
     return this.getTooltipDataAttrsForValue({ date: null, count: null });
   }
